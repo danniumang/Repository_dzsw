@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.demo.entity.Auser" alias="Auser" />
+		<typeAlias type="com.demo.entity.SysRole" alias="SysRole" />
+		<typeAlias type="com.demo.entity.GoodsType"
+			alias="GoodsType" />
+		<typeAlias type="com.demo.entity.Goods" alias="Goods" />
+		<typeAlias type="com.demo.entity.Buser" alias="Buser" />
+		<typeAlias type="com.demo.entity.Cart" alias="Cart" />
+		<typeAlias type="com.demo.entity.Focus" alias="Focus" />
+		<typeAlias type="com.demo.entity.Notice" alias="Notice" />
+		<typeAlias type="com.demo.entity.OrderBase"
+			alias="OrderBase" />
+		<typeAlias type="com.demo.entity.OrderDetail"
+			alias="OrderDetail" />
+
+
+
+	</typeAliases>
+	<mappers>
+		<mapper resource="com/demo/mybaits/SysUserMapper.xml" />
+		<mapper resource="com/demo/mybaits/SysRoleMapper.xml" />
+		<mapper resource="com/demo/mybaits/admin/auserMapper.xml" />
+		<mapper resource="com/demo/mybaits/admin/goodsTypeMapper.xml" />
+		<mapper resource="com/demo/mybaits/admin/goodsMapper.xml" />
+		<mapper resource="com/demo/mybaits/admin/adminOrderMapper.xml" />
+		<mapper resource="com/demo/mybaits/admin/adminUserMapper.xml" />
+		<mapper resource="com/demo/mybaits/admin/adminNoticeMapper.xml" />
+	</mappers>
+</configuration>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="
+ http://www.springframework.org/schema/beans
+ https://www.springframework.org/schema/beans/spring-beans.xsd
+ http://www.springframework.org/schema/tx
+ https://www.springframework.org/schema/tx/spring-tx.xsd
+ http://www.springframework.org/schema/context
+ https://www.springframework.org/schema/context/spring-context.xsd
+ http://www.springframework.org/schema/mvc
+ https://www.springframework.org/schema/mvc/spring-mvc.xsd
+ http://www.springframework.org/schema/aop
+ https://www.springframework.org/schema/aop/spring-aop.xsd
+ http://www.springframework.org/schema/security
+ https://www.springframework.org/schema/security/spring-security.xsd">
+	<!-- -->
+	<security:http pattern="/css/**" security="none"></security:http>
+	<security:http pattern="/html/**" security="none"></security:http>
+	<security:http pattern="/images/**" security="none"></security:http>
+	<security:http pattern="/js/**" security="none"></security:http>
+	<security:http pattern="/login.jsp" security="none"></security:http><!-- 
+		没有过滤链 -->
+	<security:http pattern="/failer.jsp" security="none"></security:http>
+	<security:http auto-config="true" use-expressions="true">
+
+		<security:headers>
+			<security:frame-options policy="SAMEORIGIN" /> <!--设置在页面可以通过iframe访问受保护的页面，默认为不允许访问 -->
+		</security:headers>
+
+		<!-- web端的请求过滤，后面有 方法接口的过滤 ，有过滤链，有权限限制，通过可以访问。 -->
+		<security:intercept-url pattern="/**"
+			access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"></security:intercept-url><!-- 
+			requires-channel="https" 只能通过HTTPS访问特定的URL -->
+
+		<security:form-login login-page="/login.jsp"
+			login-processing-url="/login" default-target-url="/index.jsp"
+			authentication-failure-url="/failer.jsp"
+			authentication-success-forward-url="/index2.jsp" />
+		<!-- authentication-success-handler-ref="authSuccess" 认证成功后的处理类，可以进行跳转到默认角色对应的主页面，或者进入统一的一个页面。主页面根究角色在数据库中查找对应的功能菜单并且显示出来供使用，每次都需要验证是否是该角色的权限范围？ 
+			上面将导致authentication-success-forward-url不起作用。@@@ authentication-failure-handler-ref 
+			="authFailer"认证失败后的处理类，导致authentication-failure-url不起作用 -->
+
+
+		<security:logout logout-url="/logout"
+			logout-success-url="/login.jsp" invalidate-session="true" />
+
+		<security:csrf disabled="true" /> <!-- csrf：对应CsrfFilter过滤器 跨域 disabled：是否启用CsrfFilter过滤器，如果使用自定义登录页面需要关闭此项，否则登录操作会被禁用（403） -->
+		<!-- 该配置会将remeber-me 保存值数据库 -->
+		<security:remember-me token-validity-seconds="60"
+			data-source-ref="dataSource" remember-me-parameter="remeber-me"
+			user-service-ref="userService" />
+
+		<!-- <security:http-basic /> --><!-- 基本验证 form-login 优先与basic -->
+	</security:http>
+	<!-- 加密 -->
+	<bean id='bCryptPasswordEncoder'
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
+
+	<bean id="userService"
+		class="com.demo.service.impl.UserServiceImpl"></bean>
+
+
+	<!-- 认证成功后的处理类 -->
+	<!-- <bean id="authSuccess" class="com.xxx.AuthenticationSuccessHandlerImpl"/> 
+		publicclass AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler 
+		{ publicvoid onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse 
+		response, Authentication authentication) throws IOException, ServletException 
+		{ response.sendRedirect(request.getContextPath()); } } -->
+		<!-- JdbcDaoImpl   userDetailsService的默认实现 -->
+		<bean id="userDetailsService" class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
+      <property name="dataSource" ref="dataSource"/>
+      <property name="enableGroups" value="true"/>
+		</bean>
+		
+	<!-- 注解，接口方法的上面 -->
+	<security:global-method-security
+		secured-annotations="enabled"></security:global-method-security>
+
+	<security:authentication-manager>
+		<security:authentication-provider
+			user-service-ref="userService">
+
+			<security:password-encoder
+				ref="bCryptPasswordEncoder" />
+<!--  <security:password-encoder hash="md5"/> -->
+
+			<!-- 从文件中读取用户信息 <security:user-service properties="/WEB-INF/config/users.properties"/> -->
+
+			<!-- 文件格式 #username=password,grantedAuthority[,grantedAuthority][,enabled|disabled] 
+				user=user,ROLE_USER admin=admin,ROLE_USER,ROLE_ADMIN -->
+			<!-- <security:user-service> <security:user name="liu" authorities="ROLE_USER" 
+				password="{noop}1234"/> <security:user name="liuyujie" authorities="ROLE_ADMIN" 
+				password="{noop}1234"/> </security:user-service> -->
+				
+    <!-- <security:jdbc-user-service data-source-ref="dataSource" users-by-username-query="select username, password, enabled from t_user where username = ?"/>  
+   authorities-by-username-query
+   group-authorities-by-username-query
+   -->
+<!-- dataSource 是数据源的bean .这种方法需要配置相应的数据库表结构，参见https://www.w3cschool.cn/springsecurity/uzq31ii7.html -->
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+</beans>

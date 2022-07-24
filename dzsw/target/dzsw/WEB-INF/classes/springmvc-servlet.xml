@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+ http://www.springframework.org/schema/beans
+ https://www.springframework.org/schema/beans/spring-beans.xsd
+ http://www.springframework.org/schema/tx
+ https://www.springframework.org/schema/tx/spring-tx.xsd
+ http://www.springframework.org/schema/context
+ https://www.springframework.org/schema/context/spring-context.xsd
+ http://www.springframework.org/schema/mvc
+ https://www.springframework.org/schema/mvc/spring-mvc.xsd
+ http://www.springframework.org/schema/aop
+ https://www.springframework.org/schema/aop/spring-aop.xsd">
+	<!-- 扫描包 -->
+	<context:component-scan
+		base-package="com.demo.controller"></context:component-scan>
+	<!-- <context:component-scan base-package="com.demo.service"></context:component-scan> 
+		<context:component-scan base-package="com.demo.dao"></context:component-scan> 
+		<context:component-scan base-package="com.demo.validation"></context:component-scan> -->
+	<mvc:annotation-driven></mvc:annotation-driven>
+	<!-- annotation-driven 简化开发配置 DefaultAnnotationHandlerMapping annotaionMethodHanglerAdapter 
+		resources 过滤掉不需要dispatcherservlet 的资源。 使用resources必须使用annotation-driven，否则resources 
+		会阻止任意元素被调用。 -->
+	<mvc:resources location="/css/" mapping="/css/**"></mvc:resources>
+	<mvc:resources location="/html/" mapping="/html/**"></mvc:resources>
+	<mvc:resources location="/images/" mapping="/images/**"></mvc:resources>
+	<mvc:resources location="/js/" mapping="/js/**"></mvc:resources>
+	<!-- 视图解释器 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+		id="internalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	<!-- 注册自定义的类型转换器 converters -->
+	<!-- <bean id="myconversionService" class="org.springframework.context.support.ConversionServiceFactoryBean"> 
+		<property name="converters"> <set> <bean class="com.demo.converter.GoodsConverter"> 
+		</bean> </set> </property> </bean> <mvc:annotation-driven conversion-service="myconversionService"></mvc:annotation-driven> -->
+
+	<!-- 注册自定义的类型转换器 converters -->
+	<!-- <bean id="formatterionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean"> 
+		<property name="formatters"> <list> <bean class="com.demo.converter.MyFormatter"> 
+		</bean> </list> </property> </bean> -->
+	<!-- 配置默认的区域信息 -->
+	<!-- <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver"> 
+		<property name="defaultLocale" value="zh_CN"></property> </bean> -->
+
+	<!-- <mvc:interceptors> 全局拦截器，拦截所有请求 国际化拦截器，如果采用 session/cookie 则必须配置如下 
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"></bean> 
+		<bean class="com.demo.interceptor.TestInterceptor"></bean> <mvc:interceptor> 
+		拦截作用路径 <mvc:mapping path="/**/"/> <bean class="com.demo.interceptor.TestInterceptor1"></bean> 
+		</mvc:interceptor> <mvc:interceptor> 拦截作用路径 <mvc:mapping path="/gotoTest"/>mvc:interceptor中 
+		匹配指定路劲的请求才拦截 <bean class="com.demo.interceptor.TestInterceptor2"></bean> 
+		</mvc:interceptor> <mvc:interceptor> 拦截作用路径 <mvc:mapping path="/**/"/>mvc:interceptor中 
+		匹配指定路劲的请求才拦截 <bean class="com.demo.interceptor.LoginInterceptor"></bean> 
+		</mvc:interceptor> </mvc:interceptors> -->
+	<!-- 配置消息属性文件国际化资源 -->
+	<!-- <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"> 
+		只有一种国际化资源的情况下使用该种配置，即资源开头是一种 <property name="basename" value="classpath:errorMessage"></property> 
+		<property name="basenames"> <list> <value>classpath:errorMessage</value> 
+		<value>classpath:messageResource</value> </list> </property> <property name="fileEncodings" 
+		value="UTF-8"></property> 对资源内容缓存的时间 <property name="cacheSeconds" value="120"></property> 
+		</bean> -->
+	<!-- 注册检验器 -->
+	<!-- <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"> 
+		<property name="providerClass" value="org.hibernate.validator.HibernateValidator"></property> 
+		<property name="validationMessageSource" ref="messageSource"></property> 
+		</bean> 注册格式化转换器 <mvc:annotation-driven conversion-service="formatterionService" 
+		validator="validator"></mvc:annotation-driven> -->
+	<!-- <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver"> 
+		<property name="defaultErrorView" value="error"></property> <property name="exceptionAttribute" 
+		value="ex"></property> <property name="exceptionMappings"> <props> <prop 
+		key="com.demo.exception.MyException">my-error</prop> <prop key="java.sql.SQLException">sql-error</prop> 
+		</props> </property> </bean> -->
+	<!-- MyExceptionHandler 异常spring 管理 -->
+	<bean class="com.demo.exception.MyExceptionHandler"></bean>
+	<!-- 文件上传配置multipartResolver -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+		p:defaultEncoding="UTF-8" p:maxUploadSize="5400000"
+		p:uploadTempDir="fileUpload/temp">
+		<!-- 编码格式 文件大小 临时目录 -->
+	</bean>
+
+	<!-- <bean name="/register" class="com.demo.controller.RegisterController"></bean> 
+		<bean name="/login" class="com.demo.controller.LoginController"></bean> -->
+</beans>

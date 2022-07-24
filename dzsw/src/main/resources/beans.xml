@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+ http://www.springframework.org/schema/beans
+ https://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+ http://www.springframework.org/schema/tx
+ https://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+ http://www.springframework.org/schema/context
+ https://www.springframework.org/schema/context/spring-context-4.3.xsd
+ http://www.springframework.org/schema/aop
+ https://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+	<!-- 基于setter 方法注入装配ComplexUser -->
+	<!-- 基于构造函数装配 -->
+	<bean id="user1" class="com.demo.instance.ComplexUser">
+		<constructor-arg index="0" value="liumang"></constructor-arg>
+		<constructor-arg index="1">
+			<list>
+				<value>骑行</value>
+				<value>游泳</value>
+				<value>健身</value>
+			</list>
+		</constructor-arg>
+		<constructor-arg index="2">
+			<map>
+				<entry key="hangzhou" value="杭州"></entry>
+				<entry key="shanghai" value="上海"></entry>
+				<entry key="beijing" value="北京"></entry>
+			</map>
+		</constructor-arg>
+		<constructor-arg index="3">
+			<set>
+				<value>liumang1</value>
+				<value>liumang2</value>
+				<value>liumang3</value>
+			</set>
+		</constructor-arg>
+		<constructor-arg index="4">
+			<array>
+				<value>aaaa</value>
+				<value>bbb</value>
+				<value>ccc</value>
+			</array>
+		</constructor-arg>
+	</bean>
+	<bean id="user2" class="com.demo.instance.ComplexUser">
+		<property name="uname" value="weicheng"></property>
+		<property name="hobbyList">
+			<list>
+				<value>骑行2</value>
+				<value>游泳2</value>
+				<value>健身2</value>
+			</list>
+		</property>
+		<property name="redMap">
+			<map>
+				<entry key="hangzhou2" value="杭州2"></entry>
+				<entry key="shanghai2" value="上海2"></entry>
+				<entry key="beijing2" value="北京2"></entry>
+			</map>
+		</property>
+		<property name="aliceSet">
+			<set>
+				<value>liumang12</value>
+				<value>liumang22</value>
+				<value>liumang32</value>
+			</set>
+		</property>
+		<property name="str">
+			<array>
+				<value>aaaa22</value>
+				<value>bbb22</value>
+				<value>ccc22</value>
+			</array>
+		</property>
+	</bean>
+	<bean id="jdkDao" class="com.demo.dao.impl.JdkDaoImpl"></bean>
+	<!-- 切面 -->
+	<!-- <bean id="MyAopAspect" class="com.demo.aspect.MyAopAspect"></bean> 
+		spring 代理工厂 <bean id="testAopProxy" class="org.springframework.aop.framework.ProxyFactoryBean"> 
+		指定代理实现的接口 <property name="proxyInterfaces" value="com.demo.dao.JdkDao"></property> 
+		指定环绕目标 ref="jdkDao" 此处使用ref=xxxx不是value= 否则页面报错。 <property name="target" 
+		ref="jdkDao"></property> 指定切面 <property name="interceptorNames" value="MyAopAspect"></property> 
+		<property name="proxyTargetClass" value="true"></property> </bean> -->
+	<!-- <bean id="myXMLAspectJ" class="com.demo.aspect.MyXMLAspectJ"></bean> 
+		<aop:config> <aop:aspect ref="myXMLAspectJ"> 配置切入点，那些方法被增强 * com 之间存在空格 <aop:pointcut 
+		expression="execution(* com.demo.dao.impl.*.*(..))" id="myPointCut"/> <aop:before 
+		method="before" pointcut-ref="myPointCut"/> <aop:around method="around" pointcut-ref="myPointCut"/> 
+		<aop:after-throwing method="except" pointcut-ref="myPointCut" throwing="e"/> 
+		<aop:after method="after" pointcut-ref="myPointCut"/> </aop:aspect> </aop:config> -->
+	<bean id="jdkDao1" class="com.demo.dao.impl.JdkDaoImpl"></bean>
+
+
+	<bean id="testDao" class="com.demo.dao.impl.TestDaoImpl"></bean>
+	<!-- more bean definitions go here -->
+	<bean id="testService"
+		class="com.demo.service.impl.TestServiceImpl">
+		<!-- test 注入testService中 -->
+		<constructor-arg index="0" ref="testDao"></constructor-arg>
+	</bean>
+	<bean id="testService1"
+		class="com.demo.service.impl.TestServiceImpl1">
+		<!-- test 注入testService中 -->
+		<property name="testDao" ref="testDao"></property>
+	</bean>
+	<!-- 构造防范实例化bean -->
+	<bean id="constructorInstance" class="com.demo.instance.BeanClass"
+		scope="prototype"></bean>
+	<!-- 静态工厂方法实例化bean createInstance为静态方法 -->
+	<bean id="staticFactoryBean"
+		class="com.demo.instance.BeanStaticFactory"
+		factory-method="createInstance"></bean>
+	<!-- myFactory配置工厂，定义工厂 -->
+	<bean id="myFactory" class="com.demo.instance.BeanInstanceFactory"></bean>
+	<!-- factory-bean 指定配置工厂 factory-method指定那个工厂的中的方法实例化bean -->
+	<bean id="instanceFactoryINstance" factory-bean="myFactory"
+		factory-method="createBeanClassInstance"></bean>
+
+
+</beans>

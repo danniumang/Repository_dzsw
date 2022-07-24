@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.SysRoleDao">
+
+	<select id="selectRoleByname"
+		resultType="com.demo.entity.SysRole"
+		parameterType="com.demo.entity.SysRole">
+		<bind name="param_uname" value="'%'+roleName+'%'" />
+		select * from sysrole where 1=1
+		<if test="roleName!=null and  roleName!=''">
+			and roleName like #{param_uname}
+		</if>
+
+	</select>
+	<select id="selectByUsername"
+		resultType="com.demo.entity.SysRole" parameterType="java.lang.String">
+		<bind name="param_uname" value="'%'+roleName+'%'" />
+		select * from sysrole where 1=1
+		<if test="roleName!=null and roleName!=''">
+			and roleName = #{param_uname}
+		</if>
+
+	</select>
+</mapper>
