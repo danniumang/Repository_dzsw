@@ -29,11 +29,11 @@
 					src="${pageContext.request.contextPath }/images/admin/login.gif"></td>
 			</tr>
 			<tr>
-				<td>姓名：</td>
+				<td>ad姓名：</td>
 				<td><form:input path="aname" cssClass="textSize" /></td>
 			</tr>
 			<tr>
-				<td>密码：</td>
+				<td>ad密码：</td>
 				<td><form:password path="apwd" cssClass="textSize" maxLength=""></form:password>
 				</td>
 			</tr>

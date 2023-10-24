@@ -32,9 +32,10 @@ public class SysUserController {
 		SysUser sysuser=userService.checkSysUser(user);
 		if(sysuser!=null) {
 		//model.addAttribute("sysuser",sysuser);
+			System.out.println(sysuser);
 logger.info("in the login"+sysuser);
 		
-		return "index";
+		return "admin/main";
 		}
 		else {
 		logger.info("error 登录错误重新登录"+sysuser);

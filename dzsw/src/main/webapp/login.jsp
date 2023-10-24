@@ -7,17 +7,17 @@
 <head>
 <script type="text/javascript">
 	//确定按钮
-	function gogo(){
+	function gogo() {
 		document.loginform.submit();
 	}
 	//取消按钮
-	function cancel(){
-		document.loginform.action="";
+	function cancel() {
+		document.loginform.action = "";
 	}
-	function refreshCode(){
+	function refreshCode() {
 		document.getElementById("code").src = "validateCode?" + Math.random();
-    }
-	</script>
+	}
+</script>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>

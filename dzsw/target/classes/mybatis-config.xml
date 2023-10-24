@@ -6,17 +6,14 @@
 	<typeAliases>
 		<typeAlias type="com.demo.entity.Auser" alias="Auser" />
 		<typeAlias type="com.demo.entity.SysRole" alias="SysRole" />
-		<typeAlias type="com.demo.entity.GoodsType"
-			alias="GoodsType" />
+		<typeAlias type="com.demo.entity.GoodsType" alias="GoodsType" />
 		<typeAlias type="com.demo.entity.Goods" alias="Goods" />
 		<typeAlias type="com.demo.entity.Buser" alias="Buser" />
 		<typeAlias type="com.demo.entity.Cart" alias="Cart" />
 		<typeAlias type="com.demo.entity.Focus" alias="Focus" />
 		<typeAlias type="com.demo.entity.Notice" alias="Notice" />
-		<typeAlias type="com.demo.entity.OrderBase"
-			alias="OrderBase" />
-		<typeAlias type="com.demo.entity.OrderDetail"
-			alias="OrderDetail" />
+		<typeAlias type="com.demo.entity.OrderBase" alias="OrderBase" />
+		<typeAlias type="com.demo.entity.OrderDetail" alias="OrderDetail" />
 
 
 

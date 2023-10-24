@@ -80,8 +80,8 @@
 	<!-- 批量删除 -->
 	<delete id="deleteGoods" parameterType="List">
 		delete from goods where goodid in
-		<foreach item="item" index="index" collection="list" open="("
-			separator="," close=")">
+		<foreach item="item" index="index" collection="list" 
+		open="(" separator="," close=")">
 			#{item}
 		</foreach>
 	</delete>
